@@ -24,7 +24,7 @@ type Server struct {
 	Handler Handler
 }
 
-//NewServer return a LDAP Server
+// NewServer return a LDAP Server
 func NewServer() *Server {
 	return &Server{
 		chDone: make(chan bool),
@@ -59,6 +59,12 @@ func (s *Server) ListenAndServe(addr string, options ...func(*Server)) error {
 	for _, option := range options {
 		option(s)
 	}
+
+	return s.serve()
+}
+
+func (s *Server) Server(lis net.Listener) error {
+	s.Listener = lis
 
 	return s.serve()
 }
